@@ -53,8 +53,9 @@ for (const setting of defaultSettings) {
 // Create admin if not exists
 db.prepare("INSERT OR IGNORE INTO users (username, password, is_admin) VALUES (?, ?, ?)").run("admin", "admin123", 1);
 
+const app = express();
+
 async function startServer() {
-  const app = express();
   const PORT = 3000;
 
   app.use(express.json());
@@ -157,9 +158,13 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  });
+  if (process.env.NODE_ENV !== "production" || !process.env.VERCEL) {
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  }
 }
 
 startServer();
+
+export default app;
