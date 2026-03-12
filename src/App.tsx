@@ -104,20 +104,23 @@ const LoginPage = ({ onLogin }: { onLogin: (user: User) => void }) => {
     e.preventDefault();
     setError('');
     const endpoint = isRegister ? '/api/register' : '/api/login';
+    console.log(`Attempting ${isRegister ? 'registration' : 'login'} at ${endpoint}`);
     try {
       const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
       });
+      console.log(`Response status: ${res.status}`);
       const data = await res.json();
       if (res.ok) {
         onLogin(data);
       } else {
-        setError(data.error);
+        setError(data.error || 'Erro desconhecido');
       }
     } catch (err) {
-      setError('Erro ao conectar ao servidor');
+      console.error('Fetch error:', err);
+      setError('Erro ao conectar ao servidor. Verifique sua conexão.');
     }
   };
 
