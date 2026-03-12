@@ -57,8 +57,15 @@ const app = express();
 
 async function startServer() {
   const PORT = 3000;
+  console.log(`Starting server in ${process.env.NODE_ENV || 'development'} mode`);
 
   app.use(express.json());
+
+  // Request logging middleware
+  app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    next();
+  });
 
   // API Routes
   app.post("/api/login", (req, res) => {
@@ -144,7 +151,7 @@ async function startServer() {
   });
 
   // Vite middleware for development
-  if (process.env.NODE_ENV !== "production") {
+  if (process.env.NODE_ENV !== "production" || !process.env.VERCEL) {
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
