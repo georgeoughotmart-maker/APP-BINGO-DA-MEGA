@@ -1,0 +1,5 @@
+{
+  "name": "Bingo Premiado",
+  "description": "Um aplicativo de Bingo semanal com sistema de apostas, sorteios manuais e cálculo automático de prêmios.",
+  "requestFramePermissions": []
+}
